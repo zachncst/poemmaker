@@ -13,9 +13,7 @@ trait EmbedRegex {
   }
 }
 
-trait RuleElement {
-
-}
+trait RuleElement {}
 
 case class Keyword(keyword : String) extends RuleElement
 
@@ -41,7 +39,6 @@ class PoemMaker(rules : List[Rule]) extends EmbedRegex {
 
   def convertRule(r : Rule) = Stream.emits(r.segments)
     .map(convertElement)
-    .intersperse(" ")
     .fold("")(_ + _)
     .toList
     .head
@@ -55,7 +52,7 @@ class PoemMaker(rules : List[Rule]) extends EmbedRegex {
           case s => throw new Exception(s"Unrecognized keyword ${s}")
         }
       }
-      case Text(str) => str
+      case Text(str) => str + " "
       case Randoms(segments) => {
         segments.lift(Random.nextInt(segments.size)) match {
           case Some(segment) => convertElement(segment)
